@@ -1,30 +1,32 @@
 <template>
-  <nav>
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
-  </nav>
   <router-view/>
 </template>
 
+
+<script lang="ts">
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { defineComponent } from 'vue';
+
+export default defineComponent({
+  data(){
+    return {};
+  },
+  mounted() {
+    const auth = getAuth()
+    onAuthStateChanged(auth, (user) => {
+      console.log(user);
+    });
+  },
+  methods: {},
+});
+</script>
+
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
-
-nav {
-  padding: 30px;
-}
-
-nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
-
-nav a.router-link-exact-active {
-  color: #42b983;
+body {
+  background-image: linear-gradient(
+    90deg,
+    rgba(65, 164, 253, 1),
+    rgba(14, 244, 255, 1)
+  );
 }
 </style>

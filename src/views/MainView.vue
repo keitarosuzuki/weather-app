@@ -1,69 +1,62 @@
 <template>
-  <div v-if="this.originWeatherData === ''" class="spinner-container">
+  <div v-if="originWeatherData === ''" class="spinner-container">
     <div class="spinner-border" role="status">
       <span class="visually-hidden">Loading...</span>
     </div>
   </div>
   <div class="weather-app-container" v-else>
     <div class="header-container">
-      <div
-        style="
-          display: flex;
-          justify-content: space-between;
-          margin-bottom: 10px;
-          margin-top: 10px;
-        "
-      >
+      <div class="header-container-top">
         <span class="text-city">東京 今</span>
-        <button @click="logout" type="button" class="btn btn-outline-secondary">
+        <button @click="logout" type="button" class="btn btn-outline-light">
           logout
         </button>
       </div>
       <div class="current-temperature-wrapper">
         <span class="text-current-temperature">{{ currentTemperature }}℃</span>
         <i
-          v-if="this.originWeatherData.current.rain === 1"
+          v-if="originWeatherData.current.rain === 1"
           class="weather-icon fa-solid fa-umbrella"
         ></i>
         <i
           v-else-if="
-            this.originWeatherData.current.cloud_cover >= 51 &&
-            this.originWeatherData.current.cloud_cover <= 100 &&
-            this.originWeatherData.current.rain === 0
+            originWeatherData.current.cloud_cover >= 51 &&
+            originWeatherData.current.cloud_cover <= 100 &&
+            originWeatherData.current.rain === 0
           "
           class="weather-icon fa-solid fa-cloud"
         ></i>
         <i
           v-else-if="
-            this.originWeatherData.current.cloud_cover >= 1 &&
-            this.originWeatherData.current.cloud_cover <= 50 &&
-            this.originWeatherData.current.rain === 0 &&
-            this.originWeatherData.current.is_day === 1
+            originWeatherData.current.cloud_cover >= 1 &&
+            originWeatherData.current.cloud_cover <= 50 &&
+            originWeatherData.current.rain === 0 &&
+            originWeatherData.current.is_day === 1
           "
           class="weather-icon fa-solid fa-cloud-sun"
         ></i>
         <i
           v-else-if="
-            this.originWeatherData.current.cloud_cover >= 1 &&
-            this.originWeatherData.current.cloud_cover <= 50 &&
-            this.originWeatherData.current.rain === 0 &&
-            this.originWeatherData.current.is_day === 0
+            originWeatherData.current.cloud_cover >= 1 &&
+            originWeatherData.current.cloud_cover <= 50 &&
+            originWeatherData.current.rain === 0 &&
+            originWeatherData.current.is_day === 0
           "
           class="weather-icon fa-solid fa-cloud-moon"
         ></i>
         <i
           v-else-if="
-            this.originWeatherData.current.cloud_cover === 0 &&
-            this.originWeatherData.current.rain === 0 &&
-            this.originWeatherData.current.is_day === 1
+            originWeatherData.current.cloud_cover === 0 &&
+            originWeatherData.current.rain === 0 &&
+            originWeatherData.current.is_day === 1
           "
           class="weather-icon fa-regular fa-sun"
         ></i>
         <i
           v-else-if="
-            this.originWeatherData.current.cloud_cover === 0 &&
-            this.originWeatherData.current.rain === 0 &&
-            this.originWeatherData.current.is_day === 0
+            originWeatherData.current.cloud_cover === 0 &&
+            originWeatherData.current.rain === 0 &&
+            originWeatherData.current.is_day === 0
           "
           class="weather-icon fa-regular fa-moon"
         ></i>
@@ -82,7 +75,7 @@
       <span class="text-hourly-weather">1時間ごとの天気</span>
       <div class="hourly-weather-wrapper">
         <div
-          v-for="hourlyWeatherItem in this.hourlyWeatherItems"
+          v-for="hourlyWeatherItem in hourlyWeatherItems"
           :key="hourlyWeatherItem.id"
           class="hourly-weather-item"
         >
@@ -119,7 +112,7 @@
     <div class="other-days-weather-container">
       <span class="text-other-days-weather-container">10日間天気予報</span>
       <div
-        v-for="(otherDaysWeatherItem, index) in this.otherDaysWeatherItems"
+        v-for="(otherDaysWeatherItem, index) in otherDaysWeatherItems"
         :key="otherDaysWeatherItem.id"
       >
         <div
@@ -152,7 +145,7 @@
           </div>
         </div>
         <div
-          v-else-if="index === this.otherDaysWeatherItems.length - 1"
+          v-else-if="index === otherDaysWeatherItems.length - 1"
           class="other-days-weather-wrapper end-wrapper"
         >
           <div class="other-days-weather-wrapper-left">
@@ -214,7 +207,7 @@
 <script lang="ts">
 import axios from "axios";
 import { v4 as uuidv4 } from "uuid";
-import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
+import { getAuth, signOut } from "firebase/auth";
 import { defineComponent } from "vue";
 
 export default defineComponent({
@@ -429,6 +422,12 @@ export default defineComponent({
 .weather-app-container {
   width: 1000px;
   margin: 0 auto;
+}
+.header-container-top {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  margin-top: 10px;
 }
 .weatherapp-background-color-daytime {
   background-image: linear-gradient(

@@ -1,19 +1,19 @@
 <template>
-  <div class="container mt-5">
+  <div class="container mt-5" style="width: 300px">
     <form @submit.prevent="login()">
       <div class="mb-3">
-        <label for="username" class="form-label">Mail</label>
+        <label for="email" class="form-label">Mail</label>
         <input
           v-model="email"
           type="email"
           class="form-control"
-          id="username"
-          name="username"
+          id="email"
+          name="email"
           required
         />
       </div>
       <div class="mb-3">
-        <label for="password" class="form-label">Pass</label>
+        <label for="password" class="form-label">Password</label>
         <input
           v-model="password"
           type="password"
@@ -23,20 +23,22 @@
           required
         />
       </div>
-      <button type="submit" class="btn btn-light">Login</button>
+      <div style="text-align: center">
+        <button type="submit" class="btn btn-light">Login</button>
+      </div>
     </form>
   </div>
 </template>
 
 <script lang="ts">
-import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from "firebase/auth";
-import { defineComponent } from 'vue';
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { defineComponent } from "vue";
 
 export default defineComponent({
-  data(){
+  data() {
     return {
-      email: '',
-      password: '',
+      email: "",
+      password: "",
     };
   },
   mounted() {
@@ -53,10 +55,10 @@ export default defineComponent({
     login() {
       const auth = getAuth();
       signInWithEmailAndPassword(auth, this.email, this.password)
-      .then((userCredential) => {
-        // ユーザーが正常にログインした場合の処理
+        .then((userCredential) => {
+          // ユーザーが正常にログインした場合の処理
           console.log("User logged in:", userCredential.user);
-          this.$router.push({ name: 'main' });
+          this.$router.push({ name: "main" });
         })
         .catch((error) => {
           // エラーが発生した場合の処理

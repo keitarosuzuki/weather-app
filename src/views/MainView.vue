@@ -252,6 +252,9 @@ export default defineComponent({
     },
   },
   methods: {
+    /**
+     * ログアウトし成功したときログイン画面へ遷移する
+     */
     logout() {
       const auth = getAuth();
       signOut(auth)
@@ -362,6 +365,14 @@ export default defineComponent({
         indexHourlyTime++;
       }
     },
+    /**
+     * 指定された日数分の天気データを生成し、`otherDaysWeatherItems` 配列に追加します。
+     * 
+     * 現在の日付から指定された日数分の日付を生成し、それぞれの日の曜日や天気情報を
+     * `originWeatherData` から取得して配列に追加します。
+     * 
+     * @returns {void}
+     */
     makeOtherDaysWeatherItems() {
       const today = new Date();
       const days = [

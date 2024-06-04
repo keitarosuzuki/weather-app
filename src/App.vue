@@ -4,18 +4,11 @@
 
 
 <script lang="ts">
-import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { defineComponent } from 'vue';
 
 export default defineComponent({
   data(){
     return {};
-  },
-  mounted() {
-    const auth = getAuth()
-    onAuthStateChanged(auth, (user) => {
-      console.log(user);
-    });
   },
   methods: {},
 });

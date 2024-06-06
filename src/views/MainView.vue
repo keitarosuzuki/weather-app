@@ -14,52 +14,7 @@
       </div>
       <div class="current-temperature-wrapper">
         <span class="text-current-temperature">{{ currentTemperature }}℃</span>
-        <i
-          v-if="originWeatherData.current.rain === 1"
-          class="weather-icon fa-solid fa-umbrella"
-        ></i>
-        <i
-          v-else-if="
-            originWeatherData.current.cloud_cover >= 51 &&
-            originWeatherData.current.cloud_cover <= 100 &&
-            originWeatherData.current.rain === 0
-          "
-          class="weather-icon fa-solid fa-cloud"
-        ></i>
-        <i
-          v-else-if="
-            originWeatherData.current.cloud_cover >= 1 &&
-            originWeatherData.current.cloud_cover <= 50 &&
-            originWeatherData.current.rain === 0 &&
-            originWeatherData.current.is_day === 1
-          "
-          class="weather-icon fa-solid fa-cloud-sun"
-        ></i>
-        <i
-          v-else-if="
-            originWeatherData.current.cloud_cover >= 1 &&
-            originWeatherData.current.cloud_cover <= 50 &&
-            originWeatherData.current.rain === 0 &&
-            originWeatherData.current.is_day === 0
-          "
-          class="weather-icon fa-solid fa-cloud-moon"
-        ></i>
-        <i
-          v-else-if="
-            originWeatherData.current.cloud_cover === 0 &&
-            originWeatherData.current.rain === 0 &&
-            originWeatherData.current.is_day === 1
-          "
-          class="weather-icon fa-regular fa-sun"
-        ></i>
-        <i
-          v-else-if="
-            originWeatherData.current.cloud_cover === 0 &&
-            originWeatherData.current.rain === 0 &&
-            originWeatherData.current.is_day === 0
-          "
-          class="weather-icon fa-regular fa-moon"
-        ></i>
+        <i v-bind:class="`weather-icon ${currentWeatherIconClass}`"></i>
       </div>
       <div class="current-sensory-temperature-wrapper">
         <span class="text-current-sensory-temperature"
@@ -140,8 +95,10 @@
                 class="weather-icon umbrella-color fa-solid fa-umbrella"
               ></i>
             </div>
-            {{ otherDaysWeatherItem.temperature_2m_max }} /
-            {{ otherDaysWeatherItem.temperature_2m_min }}
+            <div class="temperature-wrapper">
+              {{ otherDaysWeatherItem.temperature_2m_max }} /
+              {{ otherDaysWeatherItem.temperature_2m_min }}
+            </div>
           </div>
         </div>
         <div
@@ -169,8 +126,10 @@
                 class="weather-icon umbrella-color fa-solid fa-umbrella"
               ></i>
             </div>
-            {{ otherDaysWeatherItem.temperature_2m_max }} /
-            {{ otherDaysWeatherItem.temperature_2m_min }}
+            <div class="temperature-wrapper">
+              {{ otherDaysWeatherItem.temperature_2m_max }} /
+              {{ otherDaysWeatherItem.temperature_2m_min }}
+            </div>
           </div>
         </div>
         <div v-else class="other-days-weather-wrapper middle-wrapper">
@@ -195,8 +154,10 @@
                 class="weather-icon umbrella-color fa-solid fa-umbrella"
               ></i>
             </div>
-            {{ otherDaysWeatherItem.temperature_2m_max }} /
-            {{ otherDaysWeatherItem.temperature_2m_min }}
+            <div class="temperature-wrapper">
+              {{ otherDaysWeatherItem.temperature_2m_max }} /
+              {{ otherDaysWeatherItem.temperature_2m_min }}
+            </div>
           </div>
         </div>
       </div>
@@ -249,6 +210,24 @@ export default defineComponent({
     },
     minTemperature(): number {
       return this.originWeatherData.daily.temperature_2m_min[0];
+    },
+    currentWeatherIconClass(): string {
+      const { current } = this.originWeatherData;
+      if (current.rain === 1) {
+        return "fa-solid fa-umbrella";
+      } else if (current.cloud_cover >= 51 && current.cloud_cover <= 100) {
+        return "fa-solid fa-cloud";
+      } else if (current.cloud_cover >= 1 && current.cloud_cover <= 50) {
+        return current.is_day === 1
+          ? "fa-solid fa-cloud-sun"
+          : "fa-solid fa-cloud-moon";
+      } else if (current.cloud_cover === 0) {
+        return current.is_day === 1
+          ? "fa-regular fa-sun"
+          : "fa-regular fa-moon";
+      } else {
+        return "";
+      }
     },
   },
   methods: {
@@ -367,10 +346,10 @@ export default defineComponent({
     },
     /**
      * 指定された日数分の天気データを生成し、`otherDaysWeatherItems` 配列に追加します。
-     * 
+     *
      * 現在の日付から指定された日数分の日付を生成し、それぞれの日の曜日や天気情報を
      * `originWeatherData` から取得して配列に追加します。
-     * 
+     *
      * @returns {void}
      */
     makeOtherDaysWeatherItems() {
@@ -567,5 +546,10 @@ export default defineComponent({
 }
 .end-wrapper {
   border-radius: 5px 5px 20px 20px;
+}
+.temperature-wrapper {
+  display: flex;
+  width: 120px;
+  justify-content: space-between;
 }
 </style>
